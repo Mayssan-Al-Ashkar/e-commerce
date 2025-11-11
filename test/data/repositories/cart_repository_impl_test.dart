@@ -61,7 +61,6 @@ void main() {
     test(
       'should check if the device is online',
       () async {
-        /// Arrange
         when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
         when(() => mockUserLocalDataSource.isTokenAvailable())
             .thenAnswer((invocation) => Future.value(true));
@@ -137,7 +136,6 @@ void main() {
       test(
         'should return server failure when the call to remote data source is unsuccessful',
         () async {
-          /// Arrange
           when(() => mockUserLocalDataSource.isTokenAvailable())
               .thenAnswer((invocation) => Future.value(true));
           when(() => mockUserLocalDataSource.getToken())
@@ -148,11 +146,8 @@ void main() {
               .thenAnswer((_) async => [tCartItemModel]);
           when(() => mockLocalDataSource.saveCart([tCartItemModel]))
               .thenAnswer((invocation) => Future<void>.value());
-
-          /// Act
           final result = await repository.getRemoteCartItems();
 
-          /// Assert
           result.fold(
             (left) => expect(left, ServerFailure()),
             (right) => fail('test failed'),
@@ -163,7 +158,6 @@ void main() {
       test(
         'should sync remote cart successfully when the call to local data source is unsuccessful',
         () async {
-          /// Arrange
           when(() => mockUserLocalDataSource.isTokenAvailable())
               .thenAnswer((invocation) => Future.value(true));
           when(() => mockUserLocalDataSource.getToken())
@@ -174,10 +168,8 @@ void main() {
           when(() => mockLocalDataSource.saveCart([tCartItemModel]))
               .thenAnswer((invocation) => Future<void>.value());
 
-          /// Act
           final result = await repository.getRemoteCartItems();
 
-          /// Assert
           result.fold(
             (left) => fail('test failed'),
             (right) => expect(right, [tCartItemModel]),
@@ -190,7 +182,6 @@ void main() {
       test(
         'should return local cached cart items data when the call to local data source is successful',
         () async {
-          /// Arrange
           when(() => mockLocalDataSource.getCart())
               .thenAnswer((_) async => [tCartItemModel]);
 
@@ -208,7 +199,6 @@ void main() {
       test(
         'should return [CachedFailure] when the call to local data source is fail',
         () async {
-          /// Arrange
           when(() => mockLocalDataSource.getCart()).thenThrow(CacheFailure());
 
           /// Act
